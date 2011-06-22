@@ -1,0 +1,8 @@
+## Config options for setup.sh
+
+# Copy this file to setup-conf.sh and configure the following settings
+
+ROOT=$(pwd)
+PROJECT=xyz
+DOMAIN=xyz.example.com
+DOMAINADMIN=webmaster@example.com

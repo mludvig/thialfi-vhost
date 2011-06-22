@@ -1,0 +1,35 @@
+<VirtualHost _default_>
+ServerName	www.@DOMAIN@
+ServerAdmin	@DOMAINADMIN@
+ErrorLog	logs/www.@DOMAIN@-error_log
+CustomLog	logs/www.@DOMAIN@-access_log combined
+# Redirect http://www.@DOMAIN@ to http://@DOMAIN@
+RewriteEngine	On
+RewriteCond	%{HTTP_HOST} ^www\.(.*) [NC]
+RewriteRule	^(.*) http://%1/$1 [R=301,L]
+</VirtualHost>
+
+<VirtualHost _default_>
+ServerName	@DOMAIN@
+ServerAdmin	@DOMAINADMIN@
+ErrorLog	logs/@DOMAIN@-error_log
+CustomLog	logs/@DOMAIN@-access_log combined
+DocumentRoot	@ROOT@
+
+ErrorDocument	404	/media/404.html
+Alias		/404.html	@PROJECT@/media/404.html
+
+Alias		/media/		@ROOT@/@PROJECT@/media/
+
+<Directory @ROOT@/@PROJECT@/media/>
+Order deny,allow
+Allow from all
+Options -Indexes
+</Directory>
+
+WSGIDaemonProcess	site-@PROJECT@ user=vhost.@PROJECT@ group=vhost.@PROJECT@ threads=5 
+WSGIProcessGroup	site-@PROJECT@
+WSGIScriptAlias		/	@ROOT@/apache/conf/wsgi.conf
+
+LogLevel info
+</VirtualHost>

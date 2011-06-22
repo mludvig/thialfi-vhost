@@ -1,0 +1,72 @@
+## Minimal Apache 2.2 config for production-like testing.
+
+Listen		[::]:8008
+NameVirtualHost	*
+Timeout		300
+KeepAlive	On
+
+# Do NOT add a slash at the end of the directory path.
+ServerRoot		@ROOT@/apache
+PidFile			logs/httpd.pid
+
+LoadModule authn_anon_module modules/mod_authn_anon.so
+LoadModule authn_default_module modules/mod_authn_default.so
+LoadModule authz_host_module modules/mod_authz_host.so
+LoadModule authz_default_module modules/mod_authz_default.so
+LoadModule include_module modules/mod_include.so
+LoadModule log_config_module modules/mod_log_config.so
+LoadModule logio_module modules/mod_logio.so
+LoadModule env_module modules/mod_env.so
+LoadModule ext_filter_module modules/mod_ext_filter.so
+LoadModule mime_magic_module modules/mod_mime_magic.so
+LoadModule expires_module modules/mod_expires.so
+LoadModule deflate_module modules/mod_deflate.so
+LoadModule headers_module modules/mod_headers.so
+LoadModule usertrack_module modules/mod_usertrack.so
+LoadModule mime_module modules/mod_mime.so
+LoadModule autoindex_module modules/mod_autoindex.so
+LoadModule vhost_alias_module modules/mod_vhost_alias.so
+LoadModule negotiation_module modules/mod_negotiation.so
+LoadModule dir_module modules/mod_dir.so
+LoadModule actions_module modules/mod_actions.so
+LoadModule alias_module modules/mod_alias.so
+LoadModule rewrite_module modules/mod_rewrite.so
+LoadModule cache_module modules/mod_cache.so
+LoadModule version_module modules/mod_version.so
+
+User apache
+Group apache
+
+DirectoryIndex	index.html
+
+TypesConfig /etc/mime.types
+DefaultType text/plain
+
+<IfModule mod_mime_magic.c>
+	MIMEMagicFile conf/magic
+</IfModule>
+
+HostnameLookups Off
+
+LogFormat "%h %l %u %t \"%r\" %>s %B \"%{Referer}i\" \"%{User-Agent}i\" host:%{Host}i time-taken:%D pid:%P " superall
+LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+LogFormat "%h %l %u %t \"%r\" %>s %b" common
+
+CustomLog	logs/access_log common
+ErrorLog	logs/error_log
+LogLevel	warn
+
+<FilesMatch "(\.git$|\~$|\.py$)">
+	Order allow,deny
+	Deny from all
+</FilesMatch>
+
+AcceptPathInfo	on
+
+Include /etc/httpd/conf.d/python26-mod_wsgi.conf
+
+WSGIPythonHome		@ROOT@
+
+Include conf/vhost.conf
+
+# vim:syntax=apache
