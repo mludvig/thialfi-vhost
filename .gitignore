@@ -1,0 +1,8 @@
+*.pyc
+setup-conf.sh
+/bin
+/lib
+/lib64
+/include
+
+/apache/logs/*
