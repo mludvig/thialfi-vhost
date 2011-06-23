@@ -6,3 +6,5 @@ setup-conf.sh
 /include
 
 /apache/logs/*
+/apache/conf/*.conf
+/apache/httpd

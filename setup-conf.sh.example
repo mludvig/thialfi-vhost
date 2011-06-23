@@ -4,5 +4,7 @@
 
 ROOT=$(pwd)
 PROJECT=xyz
+# Leave PROJECT_REPO empty to let setup.sh guess
+PROJECT_REPO=git://github.com/some/project.git
 DOMAIN=xyz.example.com
 DOMAINADMIN=webmaster@example.com

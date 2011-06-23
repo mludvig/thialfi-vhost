@@ -4,8 +4,12 @@ set -x -e
 
 source setup-conf.sh
 
+if [ "${PROJECT_REPO}x" = "x" ]; then
+	PROJECT_REPO="$(dirname $(git config --get remote.origin.url))/${PROJECT}.git"
+fi
+
 for INCONF in $(find apache -name \*.in); do
-	CONF=$(basename $INCONF .in)
+	CONF="$(dirname $INCONF)/$(basename $INCONF .in)"
 	test -f $CONF && continue
 	sed -e "s,@PROJECT@,$PROJECT,g" \
 	    -e "s,@ROOT@,$ROOT,g" \
@@ -29,7 +33,6 @@ python --version 2>&1 | awk 'NR==1{if ($2 < "2.6"){print "Python is tool old. Re
 pip install PIL
 pip install django==1.3.0
 
-GIT_ORIGIN=$(git config --get remote.origin.url | sed "s/${PROJECT}-vhost.git/${PROJECT}.git/")
-git clone ${GIT_ORIGIN}
+git clone ${PROJECT_REPO}
 
 test -x ${PROJECT}/setup.sh && (cd ${PROJECT}; ./setup.sh)

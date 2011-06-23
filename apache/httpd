@@ -1,3 +1,0 @@
-#!/bin/sh
-
-exec /usr/sbin/httpd -d /home/weby-supervhosts/vhost.patmat/apache $*
