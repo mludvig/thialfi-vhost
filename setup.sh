@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -x -e
 
@@ -31,7 +31,7 @@ ${VIRTUALENV} --clear .
 python --version 2>&1 | awk 'NR==1{if ($2 < "2.6"){print "Python is tool old. Required 2.6 or newer."; exit(1);}}'
 
 pip install PIL
-pip install django==1.3.0
+pip install django==1.3.7
 
 git clone ${PROJECT_REPO}
 
