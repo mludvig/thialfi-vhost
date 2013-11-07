@@ -18,6 +18,7 @@ DocumentRoot	@ROOT@
 
 ErrorDocument	404	/media/404.html
 Alias		/404.html	@PROJECT@/media/404.html
+Alias           /media/admin    @ROOT@/lib/python2.6/site-packages/django/contrib/admin/media
 Alias		/media/		@ROOT@/@PROJECT@/media/
 
 <Directory @ROOT@/@PROJECT@/media/>
