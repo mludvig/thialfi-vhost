@@ -41,6 +41,8 @@ for module in PIL MySQLdb suds; do
 done
 
 pip install django==1.3.7
+pip install South
+pip install twilio
 
 if [ ! -d ${PROJECT} ]; then
 	git clone ${PROJECT_REPO}
