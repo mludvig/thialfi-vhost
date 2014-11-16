@@ -1,15 +1,13 @@
 <VirtualHost _default_>
-ServerName	www.@DOMAIN@
+ServerName	@DOMAIN@
+ServerAlias	www.@DOMAIN@
 ServerAdmin	@DOMAINADMIN@
 ErrorLog	logs/www.@DOMAIN@-error_log
 CustomLog	logs/www.@DOMAIN@-access_log combined
-# Redirect http://www.@DOMAIN@ to http://@DOMAIN@
-RewriteEngine	On
-RewriteCond	%{HTTP_HOST} ^www\.(.*) [NC]
-RewriteRule	^(.*) http://%1/$1 [R=301,L]
+RedirectPermanent	/	https://@DOMAIN@/
 </VirtualHost>
 
-<VirtualHost _default_>
+<VirtualHost _default_:443>
 ServerName	@DOMAIN@
 ServerAdmin	@DOMAINADMIN@
 ErrorLog	logs/@DOMAIN@-error_log
@@ -20,6 +18,7 @@ ErrorDocument	404	/media/404.html
 Alias		/404.html	@PROJECT@/media/404.html
 Alias           /media/admin    @ROOT@/lib/python2.6/site-packages/django/contrib/admin/media
 Alias		/media/		@ROOT@/@PROJECT@/media/
+Alias		/favicon.ico	@ROOT@/@PROJECT@/doc_root/static/favicon.ico
 
 <Directory @ROOT@/@PROJECT@/media/>
 Order deny,allow
@@ -32,4 +31,20 @@ WSGIProcessGroup	site-@PROJECT@
 WSGIScriptAlias		/	@ROOT@/apache/conf/wsgi.conf
 
 LogLevel info
+
+<Location />
+	AuthType                Digest
+	AuthName                "@DOMAIN@"
+	AuthDigestDomain        / https://@DOMAIN@/
+	AuthDigestProvider      file
+	AuthUserFile            @ROOT@/apache/conf/digest_pw
+
+	Require			valid-user
+	SetEnvIf		Request_URI "(^/tw/)"  allow
+
+	Order			allow,deny
+	Allow			from env=allow
+	Satisfy			any
+</Location>
+
 </VirtualHost>
